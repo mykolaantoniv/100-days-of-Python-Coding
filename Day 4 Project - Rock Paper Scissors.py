@@ -40,8 +40,8 @@ else:
   print("You put wrong number!")
 
 #Convert pc choice number in to figure
-#pc_choice = random.randint(0, 2)
-pc_choice = "2"
+
+pc_choice = random.randint(0, 2)
 
 if pc_choice == "0":
   print(rock)
@@ -50,22 +50,11 @@ elif pc_choice == "1":
 else:
   print("Computer choice:", scissors)
 
-#Find a winner
-if user_choice == "0" and pc_choice == "0":
-  print("One more time!")
-elif user_choice == "0" and pc_choice == "1":
-  print("You win!")
-elif user_choice == "0" and pc_choice == "2":
-  print("You lose!")
-elif user_choice == "1" and pc_choice == "0":
-  print("You win!")
-elif user_choice == "1" and pc_choice == "1":
-  print("One more time!")
-elif user_choice == "1" and pc_choice == "2":
-  print("You lose!")
-elif user_choice == "2" and pc_choice =="0":
-  print("You lose!")
-elif user_choice == "2" and pc_choice =="1":
-  print("You win!")
-elif user_choice == "2" and pc_choice =="2":
-  print("One more time!")
+
+# Determine the winner
+if user_choice == pc_choice:
+    print("It's a tie!")
+elif (user_choice == "0" and pc_choice == "2") or (user_choice == "1" and pc_choice == "0") or (user_choice == "2" and pc_choice == "1"):
+    print("You win!")
+else:
+    print("You lose!")

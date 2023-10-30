@@ -27,26 +27,26 @@ scissors = '''
 import random
 
 #Get user choice
-user_choice = input("What do you choose? Type 0 for Rock, 1 for paper or 2 for Scissors. \n")
+user_choice = input("What do you choose? Type 0 for Rock, 1 for Paper or 2 for Scissors. \n")
 
 #Convert user number in to figure
 if user_choice == "0":
-  print(rock)
+  print("Your choice:", rock)
 elif user_choice == "1":
-  print(paper)
+  print("Your choice:", paper)
 elif user_choice == "2":
-  print(scissors)
+  print("Your choice:", scissors)
 else:
   print("You put wrong number!")
 
 #Convert pc choice number in to figure
 
-pc_choice = random.randint(0, 2)
+pc_choice = str(random.randint(0, 2))
 
 if pc_choice == "0":
-  print(rock)
+  print("Computer choice:", rock)
 elif pc_choice == "1":
-  print(paper)
+  print("Computer choice:", paper)
 else:
   print("Computer choice:", scissors)
 

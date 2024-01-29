@@ -1,0 +1,19 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Run tests
+      run: |
+        # Add commands to run your tests here.
+
+    - name: Notify Teams
+      if: success()
+      run: |
+        curl -H 'Content-Type: application/json' -d '{"@type": "MessageCard","@context": "http://schema.org/extensions","summary": "Example summary","sections": [{"activityTitle": "CI Succeeded","activitySubtitle": "CI Workflow","activityImage": "https://teamsnodesample.azurewebsites.net/static/img/image5.png","facts": [{"name": "Repository","value": "${{ github.repository }}"},{"name": "Workflow","value": "${{ github.workflow }}"},{"name": "Action","value": "${{ github.action }}"},{"name": "Event","value": "${{ github.event_name }}"}],"markdown": true}]}' ${{ secrets.MS_TEAMS_WEBHOOK_URI }}

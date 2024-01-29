@@ -11,9 +11,9 @@ jobs:
 
     - name: Run tests
       run: |
-        npm run
-
+        npm test
+        
     - name: Notify Teams
       if: failure()
       run: |
-        curl -H 'Content-Type: application/json' -d '{"@type": "MessageCard","@context": "http://schema.org/extensions","summary": "Example summary","sections": [{"activityTitle": "CI Failed","activitySubtitle": "CI Workflow","activityImage": "https://teamsnodesample.azurewebsites.net/static/img/image5.png","facts": [{"name": "Repository","value": "${{ github.repository }}"},{"name": "Workflow","value": "${{ github.workflow }}"},{"name": "Action","value": "${{ github.action }}"},{"name": "Event","value": "${{ github.event_name }}"},{"name": "Link to Run","value": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"}],"markdown": true}]}' ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
+        curl -H 'Content-Type: application/json' -d '{"@type": "MessageCard","@context": "http://schema.org/extensions","summary": "Example summary","sections": [{"activityTitle": "CI Failed","activitySubtitle": "CI Workflow","activityImage": "https://teamsnodesample.azurewebsites.net/static/img/image5.png","facts": [{"name": "Repository","value": "${{ github.repository }}"},{"name": "Workflow","value": "${{ github.workflow }}"},{"name": "Action","value": "${{ github.action }}"},{"name": "Event","value": "${{ github.event_name }}"},{"name": "Triggered By","value": "${{ github.actor }}"},{"name": "Link to Run","value": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"}],"markdown": true}]}' ${{ secrets.MS_TEAMS_WEBHOOK_URI }}

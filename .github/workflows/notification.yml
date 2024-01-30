@@ -23,4 +23,4 @@ jobs:
             "themeColor": "0078D7",
             "title": "Build Failed",
             "text": "The build failed. Triggered by ${{ github.actor }}. Error: $MSG. Click here for more info."
-          }' ${{ secrets.TEAMS_WEBHOOK_URL }}
+          }' ${{ secrets.MS_TEAMS_WEBHOOK_URI }}

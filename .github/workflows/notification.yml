@@ -7,13 +7,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Step 1 - Checkout code
+    - name: Step 1 - test
       id: step1
-      run: git checkout master
+      run: ls -la
 
     - name: Step 2 - Set up Node.js
       id: step2
-      run: actions/setup-node@v2
+      run: pwd
 
     - name: Step 3 - Install dependencies
       id: step3
@@ -21,7 +21,7 @@ jobs:
 
     - name: Step 4 - Run tests
       id: step4
-      run: npm test
+      run: ping 8.8.8.8
 
     - name: Notify on failure
       if: failure()

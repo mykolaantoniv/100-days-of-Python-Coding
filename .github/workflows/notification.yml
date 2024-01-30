@@ -8,21 +8,23 @@ jobs:
       - name: Your Job 1
         id: job1
         run: |
-          mpm test
-  job2:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Your Job 2
-        id: job2
-        run: npm run
+          npm test
+          echo "Starting build..."
+          make || (echo "::set-output name=error::Something went wrong" && exit 1)
+          echo "Build completed successfully."
+          
   notify:
     if: failure() # This job will run if any of the previous jobs fail
-    needs: [job1, job2] # This job depends on all other jobs
     runs-on: ubuntu-latest
     steps:
-      - name: Notify Microsoft Teams on error
+      - name: Notify Teams on failure
+        if: failure()
         run: |
-          MSG="Workflow failed on ${{ github.repository }} at commit ${{ github.sha }}. Triggered by ${{ github.actor }} on ${{ github.event_name }}. See ${{ github.event.issue.html_url }} for more details. Error: ${{ needs.job1.outputs.error }} ${{ needs.job2.outputs.error }}"
-          PAYLOAD=$(echo '{ "text": "'"$MSG"'" }' | jq -c .)
-          curl -H 'Content-Type: application/json' -d "$PAYLOAD" ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
+          MSG=$(cat ${{ steps.build.outputs.stderr }})
+          curl -H 'Content-Type: application/json' -d '{
+            "@type": "MessageCard",
+            "@context": "http://schema.org/extensions",
+            "themeColor": "0078D7",
+            "title": "Build Failed",
+            "text": "The build failed. Triggered by ${{ github.actor }}. Error: $MSG. Click here for more info."
+          }' ${{ secrets.TEAMS_WEBHOOK_URL }}

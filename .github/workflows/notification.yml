@@ -27,7 +27,7 @@ jobs:
       if: failure()
       env:
         MS_TEAMS_WEBHOOK_URL: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
-        GITHUB_RUN_URL: ${{ github.run_id }}
+        GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       run: |
         MESSAGE="**Workflow Failed**\n\nWorkflow: ${{ github.workflow }}\nRun URL: $GITHUB_RUN_URL\n\nCommit Message: ${{ github.event.head_commit.message }}\n\nCommit Author: ${{ github.event.head_commit.author.name }}"
 

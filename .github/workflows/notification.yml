@@ -13,9 +13,9 @@ jobs:
       id: tests
       run: npm test
 
-    - name: Step 4 - Notify Teams on failure
-        if: failure()
-        run: |
+    - name: Notify Teams
+      if: failure()
+      run: |
           MSG=${{ steps.tests.outputs.stderr }}
           curl -H 'Content-Type: application/json' -d '{
             "@type": "MessageCard",

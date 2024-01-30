@@ -10,12 +10,13 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Run tests
-      run: npm test
-  notify:      
+      id: tests
+      run: npm test || echo "::set-output name=stderr::$(npm test 2>&1 >/dev/null)"
+
     - name: Notify Teams
       if: always()
       run: |
-          MSG=$(cat ${{ steps.build.outputs.stderr }})
+          MSG=${{ steps.tests.outputs.stderr }}
           curl -H 'Content-Type: application/json' -d '{
             "@type": "MessageCard",
             "@context": "http://schema.org/extensions",

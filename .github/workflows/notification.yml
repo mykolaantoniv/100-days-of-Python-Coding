@@ -7,20 +7,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Step 1 - Checkout code
+      id: step1
+      run: git checkout master || (echo "::set-output name=stderr::$(git checkout master 2>&1 >/dev/null)" && exit 1)
 
-    - name: Run tests
-      id: tests
-      run: npm test
+    - name: Step 2 - Set up Node.js
+      id: step2
+      run: actions/setup-node@v2 || (echo "::set-output name=stderr::$(actions/setup-node@v2 2>&1 >/dev/null)" && exit 1)
 
-    - name: Notify Teams
+    - name: Step 3 - Install dependencies
+      id: step3
+      run: npm ci || (echo "::set-output name=stderr::$(npm ci 2>&1 >/dev/null)" && exit 1)
+
+    - name: Step 4 - Run tests
+      id: step4
+      run: npm test || (echo "::set-output name=stderr::$(npm test 2>&1 >/dev/null)" && exit 1)
+
+    - name: Step 5 - Notify Teams
       if: failure()
       run: |
-          MSG=${{ steps.tests.outputs.stderr }}
+          if [[ -n "${{ steps.step1.outputs.stderr }}" ]]; then
+            MSG=${{ steps.step1.outputs.stderr }}
+          elif [[ -n "${{ steps.step2.outputs.stderr }}" ]]; then
+            MSG=${{ steps.step2.outputs.stderr }}
+          elif [[ -n "${{ steps.step3.outputs.stderr }}" ]]; then
+            MSG=${{ steps.step3.outputs.stderr }}
+          elif [[ -n "${{ steps.step4.outputs.stderr }}" ]]; then
+            MSG=${{ steps.step4.outputs.stderr }}
+          fi
           curl -H 'Content-Type: application/json' -d '{
             "@type": "MessageCard",
             "@context": "http://schema.org/extensions",
             "themeColor": "0078D7",
             "title": "Build Failed",
-            "text": "The build failed. Triggered by ${{ github.actor }}. Error: $MSG. Click here for more info."
+            "text": "The build failed. Triggered by **${{ github.actor }}**. Error: $MSG. Click here for more info."
           }' ${{ secrets.MS_TEAMS_WEBHOOK_URI }}

@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Notify Teams on failure
-        if: failure()
+        if: always()
         run: |
           MSG=$(cat ${{ steps.build.outputs.stderr }})
           curl -H 'Content-Type: application/json' -d '{

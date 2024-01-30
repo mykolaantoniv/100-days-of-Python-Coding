@@ -1,25 +1,20 @@
-name: Workflow
+name: CI
+
 on: [push, pull_request]
+
 jobs:
-  job1:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Your Job 1
-        id: job1
-        run: |
-          npm test
-          echo "Starting build..."
-          make || (echo "::set-output name=error::Something went wrong" && exit 1)
-          echo "Build completed successfully."
-          
-  job2:
-    needs: job1  
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-      - name: Notify Teams on failure
-        run: |
+    - uses: actions/checkout@v2
+
+    - name: Run tests
+      run: npm test
+  notify:      
+    - name: Notify Teams
+      if: always()
+      run: |
           MSG=$(cat ${{ steps.build.outputs.stderr }})
           curl -H 'Content-Type: application/json' -d '{
             "@type": "MessageCard",

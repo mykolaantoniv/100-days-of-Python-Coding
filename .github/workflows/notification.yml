@@ -13,12 +13,12 @@ jobs:
           make || (echo "::set-output name=error::Something went wrong" && exit 1)
           echo "Build completed successfully."
           
-  notify:
-    if: failure() # This job will run if any of the previous jobs fail
+  job2:
+    needs: job1  
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Notify Teams on failure
-        if: always()
         run: |
           MSG=$(cat ${{ steps.build.outputs.stderr }})
           curl -H 'Content-Type: application/json' -d '{
